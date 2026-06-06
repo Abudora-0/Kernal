@@ -7,8 +7,8 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
   providers: [
     GithubProvider({
-      clientId: process.env.GITHUB_ID!,
-      clientSecret: process.env.GITHUB_SECRET!,
+      clientId: process.env.GITHUB_ID ?? "",
+      clientSecret: process.env.GITHUB_SECRET ?? "",
       authorization: {
         params: {
           scope: "read:user user:email repo",
@@ -26,7 +26,6 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     async signIn({ user, account, profile }) {
-      // Store GitHub username after sign in (user exists in DB at this point)
       if (account?.provider === "github" && profile && user?.id) {
         try {
           await prisma.user.update({
@@ -42,5 +41,5 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/login",
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET ?? "fallback-secret",
 };
