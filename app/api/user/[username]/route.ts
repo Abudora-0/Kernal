@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { getUserProfile, getUserRepos, getUserEvents, getContributions } from "@/lib/github";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
