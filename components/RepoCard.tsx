@@ -1,3 +1,5 @@
+"use client";
+
 import { Star, GitFork, Lock, ExternalLink } from "lucide-react";
 
 interface Repo {
@@ -19,48 +21,55 @@ export default function RepoCard({ repo }: { repo: Repo }) {
       href={repo.url}
       target="_blank"
       rel="noreferrer"
-      className="group flex flex-col bg-[#0d1117] border border-[#21262d] hover:border-violet-500/40 rounded-xl p-5 space-y-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-violet-500/10"
+      className="group flex flex-col rounded-xl p-5 space-y-3 transition-all duration-300 hover:-translate-y-1"
+      style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)" }}
+      onMouseEnter={e => {
+        e.currentTarget.style.borderColor = "rgba(251,146,60,0.35)";
+        e.currentTarget.style.background = "rgba(251,146,60,0.03)";
+        e.currentTarget.style.boxShadow = "0 8px 24px rgba(251,146,60,0.08)";
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.borderColor = "var(--border)";
+        e.currentTarget.style.background = "var(--bg-elevated)";
+        e.currentTarget.style.boxShadow = "none";
+      }}
     >
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
-          {repo.isPrivate && <Lock className="w-3.5 h-3.5 text-gray-500 flex-shrink-0" />}
-          <h3 className="font-semibold text-white group-hover:text-violet-400 transition-colors truncate text-sm">
+          {repo.isPrivate && <Lock className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#4a6080" }} />}
+          <h3 className="font-semibold text-white group-hover:text-orange-400 transition-colors truncate text-sm">
             {repo.name}
           </h3>
         </div>
-        <ExternalLink className="w-3.5 h-3.5 text-gray-600 group-hover:text-violet-400 transition-colors flex-shrink-0" />
+        <ExternalLink className="w-3.5 h-3.5 flex-shrink-0 transition-colors group-hover:text-orange-400"
+          style={{ color: "#2a3a50" }} />
       </div>
 
-      <p className="text-xs text-gray-400 line-clamp-2 flex-1 leading-relaxed min-h-[2rem]">
+      <p className="text-xs line-clamp-2 flex-1 leading-relaxed min-h-[2rem]" style={{ color: "#4a6080" }}>
         {repo.description || "No description provided."}
       </p>
 
       {repo.topics && repo.topics.length > 0 && (
         <div className="flex flex-wrap gap-1">
           {repo.topics.map((t) => (
-            <span key={t} className="text-[10px] px-2 py-0.5 bg-violet-500/10 text-violet-300 rounded-full border border-violet-500/20">
+            <span key={t} className="text-[10px] px-2 py-0.5 rounded-full"
+              style={{ background: "rgba(34,211,238,0.08)", color: "#22d3ee", border: "1px solid rgba(34,211,238,0.15)" }}>
               {t}
             </span>
           ))}
         </div>
       )}
 
-      <div className="flex items-center justify-between text-xs text-gray-500 pt-1 border-t border-[#21262d]">
+      <div className="flex items-center justify-between text-xs pt-1" style={{ color: "#2a3a50", borderTop: "1px solid var(--border)" }}>
         <div className="flex items-center gap-3">
           {repo.language && (
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: langColors[repo.language] || "#8b5cf6" }} />
-              <span className="text-gray-400">{repo.language}</span>
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: langColors[repo.language] || "#fb923c" }} />
+              <span style={{ color: "#4a6080" }}>{repo.language}</span>
             </span>
           )}
-          <span className="flex items-center gap-1">
-            <Star className="w-3 h-3" />
-            {repo.stars}
-          </span>
-          <span className="flex items-center gap-1">
-            <GitFork className="w-3 h-3" />
-            {repo.forks}
-          </span>
+          <span className="flex items-center gap-1"><Star className="w-3 h-3" />{repo.stars}</span>
+          <span className="flex items-center gap-1"><GitFork className="w-3 h-3" />{repo.forks}</span>
         </div>
         <span>{updated}</span>
       </div>

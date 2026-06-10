@@ -21,6 +21,22 @@ import StatCard from "@/components/StatCard";
 
 type Tab = "overview" | "repos" | "activity";
 
+function Logo() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hlg" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#fb923c"/>
+          <stop offset="100%" stopColor="#22d3ee"/>
+        </linearGradient>
+      </defs>
+      <rect x="6" y="6" width="88" height="88" rx="22" fill="url(#hlg)"/>
+      <polyline points="10,50 28,50 36,20 46,74 55,34 63,50 90,50"
+        stroke="white" strokeWidth="6.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -73,8 +89,8 @@ export default function DashboardPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="min-h-screen bg-[#0a0c10]">
-        <div className="h-14 bg-[#0d1117] border-b border-[#21262d]" />
+      <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
+        <div className="h-14" style={{ background: "var(--bg-surface)", borderBottom: "1px solid var(--border)" }} />
         <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
           <div className="skeleton h-36 rounded-2xl" />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -88,13 +104,16 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#0a0c10] flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg-base)" }}>
         <div className="glass rounded-2xl p-8 text-center space-y-4 max-w-sm mx-4">
-          <div className="w-12 h-12 bg-red-500/10 rounded-xl flex items-center justify-center mx-auto">
-            <Activity className="w-6 h-6 text-red-400" />
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto"
+            style={{ background: "rgba(251,146,60,0.1)", border: "1px solid rgba(251,146,60,0.2)" }}>
+            <Activity className="w-6 h-6" style={{ color: "#fb923c" }} />
           </div>
-          <p className="text-red-400 font-medium">{error}</p>
-          <button onClick={fetchData} className="w-full bg-violet-600 hover:bg-violet-700 text-white py-2.5 px-4 rounded-xl transition-colors font-medium">
+          <p className="font-medium" style={{ color: "#fb923c" }}>{error}</p>
+          <button onClick={fetchData}
+            className="w-full text-white py-2.5 px-4 rounded-xl transition-colors font-medium"
+            style={{ background: "linear-gradient(135deg, #fb923c, #22d3ee)" }}>
             Try Again
           </button>
         </div>
@@ -110,59 +129,65 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0c10] text-white">
+    <div className="min-h-screen text-white" style={{ background: "var(--bg-base)" }}>
       {/* Header */}
-      <header className="border-b border-[#21262d] bg-[#0d1117]/80 backdrop-blur-xl sticky top-0 z-20">
+      <header className="sticky top-0 z-20 backdrop-blur-xl"
+        style={{ borderBottom: "1px solid var(--border)", background: "rgba(11,14,22,0.85)" }}>
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center gap-4">
           {/* Logo */}
           <div className="flex items-center gap-2.5 flex-shrink-0">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center">
-              <Activity className="w-3.5 h-3.5 text-white" />
-            </div>
+            <Logo />
             <span className="font-bold text-white hidden sm:block">DevPulse</span>
           </div>
 
           {/* Search */}
           <form onSubmit={handleSearch} className="flex-1 max-w-xs">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: "#3a5070" }} />
               <input
                 ref={searchRef}
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search any GitHub user..."
-                className="w-full bg-white/5 border border-[#30363d] rounded-lg pl-9 pr-3 py-1.5 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-violet-500 transition-colors"
+                className="w-full rounded-lg pl-9 pr-3 py-1.5 text-sm text-white placeholder:text-[#3a5070] focus:outline-none transition-colors"
+                style={{ background: "rgba(255,255,255,0.05)", border: "1px solid var(--border-muted)" }}
+                onFocus={e => (e.currentTarget.style.borderColor = "rgba(251,146,60,0.5)")}
+                onBlur={e => (e.currentTarget.style.borderColor = "var(--border-muted)")}
               />
             </div>
           </form>
 
           <div className="flex items-center gap-2 ml-auto">
-            {/* Share button */}
-            <button
-              onClick={copyShareLink}
-              className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 border border-[#30363d] px-2.5 py-1.5 rounded-lg transition-all hidden sm:flex"
-              title="Copy shareable link"
-            >
-              {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Share2 className="w-3.5 h-3.5" />}
-              {copied ? "Copied!" : "Share"}
+            {/* Share */}
+            <button onClick={copyShareLink}
+              className="hidden sm:flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg transition-all"
+              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid var(--border-muted)", color: "#7a8fa8" }}
+              title="Copy shareable link">
+              {copied
+                ? <><Check className="w-3.5 h-3.5" style={{ color: "#a3e635" }} />Copied!</>
+                : <><Share2 className="w-3.5 h-3.5" />Share</>}
             </button>
 
-            <div className="w-px h-5 bg-[#30363d]" />
+            <div className="w-px h-5" style={{ background: "var(--border-muted)" }} />
 
             <button onClick={fetchData} disabled={refreshing}
-              className="p-2 hover:bg-white/5 rounded-lg transition-colors text-gray-400 hover:text-white disabled:opacity-40"
+              className="p-2 rounded-lg transition-colors disabled:opacity-40"
+              style={{ color: "#7a8fa8" }}
               title="Refresh">
               <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
             </button>
 
             {session?.user?.image && (
-              <img src={session.user.image} alt="avatar" className="w-7 h-7 rounded-full ring-2 ring-violet-500/50" />
+              <img src={session.user.image} alt="avatar"
+                className="w-7 h-7 rounded-full"
+                style={{ boxShadow: "0 0 0 2px rgba(251,146,60,0.4)" }} />
             )}
-            <span className="text-sm text-gray-300 hidden md:block">{session?.user?.name}</span>
+            <span className="text-sm hidden md:block" style={{ color: "#8fa8c4" }}>{session?.user?.name}</span>
             <button onClick={() => signOut({ callbackUrl: "/login" })}
-              className="p-2 hover:bg-white/5 rounded-lg transition-colors text-gray-400 hover:text-red-400"
+              className="p-2 rounded-lg transition-colors"
+              style={{ color: "#7a8fa8" }}
               title="Sign out">
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-4 h-4 hover:text-red-400" />
             </button>
           </div>
         </div>
@@ -171,28 +196,41 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {/* Profile Banner */}
         {profile && (
-          <div className="animate-fade-in-up glass rounded-2xl p-6">
+          <div className="animate-fade-in-up glass rounded-2xl p-6"
+            style={{ borderTop: "2px solid transparent", backgroundImage: "linear-gradient(var(--bg-surface), var(--bg-surface)), linear-gradient(to right, #fb923c, #22d3ee)", backgroundOrigin: "border-box", backgroundClip: "padding-box, border-box" }}>
             <div className="flex items-start gap-5">
               <div className="relative flex-shrink-0">
-                <img src={profile.avatar_url} alt="avatar" className="w-20 h-20 rounded-2xl ring-2 ring-violet-500/30" />
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-[#0d1117]" />
+                <img src={profile.avatar_url} alt="avatar"
+                  className="w-20 h-20 rounded-2xl"
+                  style={{ boxShadow: "0 0 0 2px rgba(251,146,60,0.25)" }} />
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2"
+                  style={{ borderColor: "var(--bg-surface)" }} />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 flex-wrap">
                   <h1 className="text-xl font-bold text-white">{profile.name || profile.login}</h1>
-                  <span className="text-sm text-gray-400 bg-white/5 px-2 py-0.5 rounded-full">@{profile.login}</span>
-                  <a href={profile.html_url} target="_blank" rel="noreferrer" className="text-gray-500 hover:text-violet-400 transition-colors">
+                  <span className="text-sm px-2 py-0.5 rounded-full" style={{ color: "#7a8fa8", background: "rgba(255,255,255,0.05)" }}>
+                    @{profile.login}
+                  </span>
+                  <a href={profile.html_url} target="_blank" rel="noreferrer"
+                    className="transition-colors" style={{ color: "#3a5070" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#fb923c")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#3a5070")}>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                   {data?.grade && (
-                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-violet-500/20 border border-violet-500/30 text-violet-300">
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+                      style={{ background: "rgba(251,146,60,0.15)", border: "1px solid rgba(251,146,60,0.3)", color: "#fb923c" }}>
                       Grade {data.grade}
                     </span>
                   )}
                 </div>
-                {profile.bio && <p className="text-gray-400 text-sm mt-1.5 leading-relaxed">{profile.bio}</p>}
-                <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-gray-500">
-                  <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5" />{profile.followers} followers · {profile.following} following</span>
+                {profile.bio && <p className="text-sm mt-1.5 leading-relaxed" style={{ color: "#7a8fa8" }}>{profile.bio}</p>}
+                <div className="flex flex-wrap items-center gap-4 mt-3 text-sm" style={{ color: "#4a6080" }}>
+                  <span className="flex items-center gap-1.5">
+                    <Users className="w-3.5 h-3.5" />
+                    {profile.followers} followers · {profile.following} following
+                  </span>
                   {profile.location && <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" />{profile.location}</span>}
                   {profile.company && <span className="flex items-center gap-1.5"><Building2 className="w-3.5 h-3.5" />{profile.company}</span>}
                 </div>
@@ -204,10 +242,10 @@ export default function DashboardPage() {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
-            { icon: <BookOpen className="w-4 h-4 text-violet-400" />, label: "Public Repos", value: data?.totalRepos ?? 0, color: "violet" as const, delay: 0 },
-            { icon: <Star className="w-4 h-4 text-yellow-400" />, label: "Total Stars", value: data?.totalStars ?? 0, color: "yellow" as const, delay: 80 },
-            { icon: <TrendingUp className="w-4 h-4 text-emerald-400" />, label: "Contributions", value: data?.contributions?.totalContributions ?? 0, color: "green" as const, delay: 160 },
-            { icon: <GitFork className="w-4 h-4 text-blue-400" />, label: "Total Forks", value: data?.totalForks ?? 0, color: "blue" as const, delay: 240 },
+            { icon: <BookOpen className="w-4 h-4 text-orange-400" />, label: "Public Repos",   value: data?.totalRepos ?? 0,                              color: "orange" as const, delay: 0 },
+            { icon: <Star      className="w-4 h-4 text-yellow-400" />, label: "Total Stars",    value: data?.totalStars ?? 0,                              color: "yellow" as const, delay: 80 },
+            { icon: <TrendingUp className="w-4 h-4 text-cyan-400"  />, label: "Contributions", value: data?.contributions?.totalContributions ?? 0,       color: "cyan"   as const, delay: 160 },
+            { icon: <GitFork   className="w-4 h-4 text-lime-400"   />, label: "Total Forks",   value: data?.totalForks ?? 0,                              color: "lime"   as const, delay: 240 },
           ].map((s, i) => (
             <div key={s.label} className={`animate-fade-in-up stagger-${i + 1}`}>
               <StatCard {...s} />
@@ -216,10 +254,14 @@ export default function DashboardPage() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 bg-[#161b22] border border-[#21262d] rounded-xl p-1 w-fit">
+        <div className="flex gap-1 rounded-xl p-1 w-fit"
+          style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)" }}>
           {tabs.map((t) => (
             <button key={t.id} onClick={() => setTab(t.id)}
-              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${tab === t.id ? "bg-violet-600 text-white shadow-lg shadow-violet-500/30" : "text-gray-400 hover:text-white"}`}>
+              className="px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
+              style={tab === t.id
+                ? { background: "linear-gradient(135deg, #fb923c, #22d3ee)", color: "white", boxShadow: "0 4px 12px rgba(251,146,60,0.3)" }
+                : { color: "#4a6080" }}>
               {t.label}
             </button>
           ))}
@@ -228,11 +270,10 @@ export default function DashboardPage() {
         {/* Tab: Overview */}
         {tab === "overview" && (
           <div className="space-y-6 animate-fade-in">
-            {/* Score + Contribution Graph */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
               {data?.score !== undefined && (
                 <div className="glass rounded-2xl p-6">
-                  <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm">
+                  <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm text-white">
                     <Trophy className="w-4 h-4 text-yellow-400" />Developer Score
                   </h2>
                   <ScoreCard score={data.score} grade={data.grade} breakdown={data.breakdown} />
@@ -241,10 +282,11 @@ export default function DashboardPage() {
               {data?.contributions && (
                 <div className="glass rounded-2xl p-6 lg:col-span-2">
                   <div className="flex items-center justify-between mb-5">
-                    <h2 className="font-semibold flex items-center gap-2 text-sm">
-                      <TrendingUp className="w-4 h-4 text-emerald-400" />Contribution Activity
+                    <h2 className="font-semibold flex items-center gap-2 text-sm text-white">
+                      <TrendingUp className="w-4 h-4 text-cyan-400" />Contribution Activity
                     </h2>
-                    <span className="text-xs text-gray-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
+                    <span className="text-xs px-2.5 py-1 rounded-full"
+                      style={{ color: "#22d3ee", background: "rgba(34,211,238,0.08)", border: "1px solid rgba(34,211,238,0.2)" }}>
                       {data.contributions.totalContributions.toLocaleString()} this year
                     </span>
                   </div>
@@ -253,34 +295,46 @@ export default function DashboardPage() {
               )}
             </div>
 
-            {/* Languages + Streak + Hourly */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
               {data?.languages?.length > 0 && (
                 <div className="glass rounded-2xl p-6">
-                  <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm"><Code2 className="w-4 h-4 text-blue-400" />Languages</h2>
+                  <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm text-white">
+                    <Code2 className="w-4 h-4 text-cyan-400" />Languages
+                  </h2>
                   <LanguageChart languages={data.languages} />
                 </div>
               )}
               {data?.streak && (
                 <div className="glass rounded-2xl p-6">
-                  <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm"><Flame className="w-4 h-4 text-orange-400" />Coding Streak</h2>
+                  <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm text-white">
+                    <Flame className="w-4 h-4 text-orange-400" />Coding Streak
+                  </h2>
                   <StreakCard current={data.streak.current} longest={data.streak.longest} activityByDay={data.activityByDay || []} />
                 </div>
               )}
               {data?.activityByHour && (
                 <div className="glass rounded-2xl p-6">
-                  <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm"><Clock className="w-4 h-4 text-violet-400" />Coding Hours</h2>
+                  <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm text-white">
+                    <Clock className="w-4 h-4 text-orange-400" />Coding Hours
+                  </h2>
                   <HourlyHeatmap activityByHour={data.activityByHour} />
                 </div>
               )}
             </div>
 
-            {/* Top Repos */}
             {data?.topRepos?.length > 0 && (
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="font-semibold flex items-center gap-2 text-sm"><Star className="w-4 h-4 text-yellow-400" />Top Repositories</h2>
-                  <button onClick={() => setTab("repos")} className="text-sm text-violet-400 hover:text-violet-300 transition-colors">View all →</button>
+                  <h2 className="font-semibold flex items-center gap-2 text-sm text-white">
+                    <Star className="w-4 h-4 text-yellow-400" />Top Repositories
+                  </h2>
+                  <button onClick={() => setTab("repos")}
+                    className="text-sm transition-colors"
+                    style={{ color: "#fb923c" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#22d3ee")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#fb923c")}>
+                    View all →
+                  </button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {data.topRepos.slice(0, 3).map((repo: any) => <RepoCard key={repo.name} repo={repo} />)}
@@ -306,17 +360,23 @@ export default function DashboardPage() {
           <div className="space-y-5 animate-fade-in">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <div className="glass rounded-2xl p-6">
-                <h2 className="font-semibold flex items-center gap-2 mb-4 text-sm"><GitCommit className="w-4 h-4 text-violet-400" />Recent Commits</h2>
+                <h2 className="font-semibold flex items-center gap-2 mb-4 text-sm text-white">
+                  <GitCommit className="w-4 h-4 text-orange-400" />Recent Commits
+                </h2>
                 <CommitFeed commits={data?.commits || []} />
               </div>
               <div className="glass rounded-2xl p-6">
-                <h2 className="font-semibold flex items-center gap-2 mb-4 text-sm"><GitPullRequest className="w-4 h-4 text-emerald-400" />Pull Requests</h2>
+                <h2 className="font-semibold flex items-center gap-2 mb-4 text-sm text-white">
+                  <GitPullRequest className="w-4 h-4 text-cyan-400" />Pull Requests
+                </h2>
                 <PRFeed prs={data?.prs || []} />
               </div>
             </div>
             {data?.activityByHour && (
               <div className="glass rounded-2xl p-6">
-                <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm"><Clock className="w-4 h-4 text-violet-400" />Activity by Hour of Day</h2>
+                <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm text-white">
+                  <Clock className="w-4 h-4 text-orange-400" />Activity by Hour of Day
+                </h2>
                 <HourlyHeatmap activityByHour={data.activityByHour} />
               </div>
             )}

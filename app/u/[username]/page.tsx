@@ -117,10 +117,10 @@ export default function PublicProfilePage() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <StatCard icon={<BookOpen className="w-4 h-4 text-violet-400" />} label="Public Repos" value={data?.totalRepos ?? 0} color="violet" />
+          <StatCard icon={<BookOpen className="w-4 h-4 text-orange-400" />} label="Public Repos" value={data?.totalRepos ?? 0} color="orange" />
           <StatCard icon={<Star className="w-4 h-4 text-yellow-400" />} label="Total Stars" value={data?.totalStars ?? 0} color="yellow" />
-          <StatCard icon={<TrendingUp className="w-4 h-4 text-emerald-400" />} label="Contributions" value={data?.contributions?.totalContributions ?? 0} color="green" />
-          <StatCard icon={<GitFork className="w-4 h-4 text-blue-400" />} label="Total Forks" value={data?.totalForks ?? 0} color="blue" />
+          <StatCard icon={<TrendingUp className="w-4 h-4 text-cyan-400" />} label="Contributions" value={data?.contributions?.totalContributions ?? 0} color="cyan" />
+          <StatCard icon={<GitFork className="w-4 h-4 text-lime-400" />} label="Total Forks" value={data?.totalForks ?? 0} color="lime" />
         </div>
 
         {/* Tabs */}
