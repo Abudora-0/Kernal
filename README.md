@@ -1,5 +1,7 @@
 # DevPulse
 
+**Live Demo:** [dev-pulse-one-xi.vercel.app](https://dev-pulse-one-xi.vercel.app)
+
 A GitHub-integrated developer dashboard that turns your public GitHub activity into a beautiful, data-rich profile — contribution graphs, coding streaks, language breakdowns, and a developer score, all in one place.
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js&logoColor=white)
