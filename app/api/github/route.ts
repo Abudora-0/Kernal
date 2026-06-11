@@ -63,6 +63,19 @@ export async function GET() {
       }
     }
 
+    // Fallback: derive username from providerAccountId (GitHub user ID won't work) or email
+    if (!username) {
+      // Try fetching with no token using providerAccountId as a last resort via public API
+      const providerRes = await fetch(`https://api.github.com/user/${account.providerAccountId}`);
+      if (providerRes.ok) {
+        const providerData = await providerRes.json();
+        username = providerData.login;
+        if (username) {
+          await prisma.user.update({ where: { id: userId }, data: { githubUsername: username } });
+        }
+      }
+    }
+
     if (!username) return NextResponse.json({ error: "Could not determine GitHub username" }, { status: 400 });
 
     // Fetch all data in parallel
