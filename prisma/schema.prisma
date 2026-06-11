@@ -36,15 +36,34 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
+  id             String       @id @default(cuid())
+  name           String?
+  email          String?      @unique
+  emailVerified  DateTime?
+  image          String?
   githubUsername String?
-  accounts      Account[]
-  sessions      Session[]
-  pinnedRepos   PinnedRepo[]
+  accounts       Account[]
+  sessions       Session[]
+  pinnedRepos    PinnedRepo[]
+  jobs           Job[]
+}
+
+model Job {
+  id        String    @id @default(cuid())
+  userId    String
+  company   String
+  role      String
+  status    String    @default("wishlist")
+  priority  String    @default("medium")
+  salary    String?
+  location  String?
+  url       String?
+  notes     String?   @db.Text
+  appliedAt DateTime?
+  deadline  DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
