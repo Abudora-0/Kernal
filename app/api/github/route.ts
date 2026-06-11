@@ -47,7 +47,6 @@ export async function GET() {
     if (!account) return NextResponse.json({ error: "No GitHub account linked" }, { status: 400 });
 
     const token = account.access_token ?? process.env.GITHUB_TOKEN ?? undefined;
-    console.log("token present:", !!token, "source:", account.access_token ? "oauth" : process.env.GITHUB_TOKEN ? "env" : "none");
 
     // Get or fetch username
     const dbUser = await prisma.user.findUnique({ where: { id: userId } });
