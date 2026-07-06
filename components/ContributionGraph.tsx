@@ -5,20 +5,20 @@ import { useState } from "react";
 interface Day { date: string; contributionCount: number; color: string; }
 interface Week { contributionDays: Day[]; }
 
-const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MONTHS = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
 
+/* green signal ramp on terminal black */
 function getColor(count: number) {
-  if (count === 0) return "#161b22";
-  if (count <= 2) return "#0e4429";
-  if (count <= 5) return "#006d32";
-  if (count <= 9) return "#26a641";
-  return "#39d353";
+  if (count === 0) return "#11161c";
+  if (count <= 2) return "rgba(46,232,137,0.22)";
+  if (count <= 5) return "rgba(46,232,137,0.45)";
+  if (count <= 9) return "rgba(46,232,137,0.7)";
+  return "#2ee889";
 }
 
 export default function ContributionGraph({ weeks }: { weeks: Week[] }) {
   const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
 
-  // Build month labels
   const monthLabels: { label: string; index: number }[] = [];
   let lastMonth = -1;
   weeks.forEach((week, wi) => {
@@ -37,7 +37,7 @@ export default function ContributionGraph({ weeks }: { weeks: Week[] }) {
           {weeks.map((_, wi) => {
             const lbl = monthLabels.find(m => m.index === wi);
             return (
-              <div key={wi} className="w-3 text-[10px] text-gray-500 truncate">
+              <div key={wi} className="mono w-3 text-[8.5px] truncate" style={{ color: "var(--ink-faint)" }}>
                 {lbl ? lbl.label : ""}
               </div>
             );
@@ -51,12 +51,12 @@ export default function ContributionGraph({ weeks }: { weeks: Week[] }) {
               {week.contributionDays.map((day, di) => (
                 <div
                   key={di}
-                  className="w-3 h-3 rounded-sm cursor-pointer transition-all duration-150 hover:scale-125 hover:ring-1 hover:ring-white/20"
+                  className="w-3 h-3 cursor-pointer transition-transform duration-100 hover:scale-125"
                   style={{ backgroundColor: getColor(day.contributionCount) }}
                   onMouseEnter={(e) => {
                     const rect = (e.target as HTMLElement).getBoundingClientRect();
                     setTooltip({
-                      text: `${day.contributionCount} contributions on ${new Date(day.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`,
+                      text: `${day.contributionCount} contributions · ${new Date(day.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`,
                       x: rect.left,
                       y: rect.top - 36,
                     });
@@ -71,8 +71,8 @@ export default function ContributionGraph({ weeks }: { weeks: Week[] }) {
         {/* Tooltip */}
         {tooltip && (
           <div
-            className="fixed z-50 px-2 py-1 bg-gray-900 border border-gray-700 rounded-lg text-xs text-white pointer-events-none whitespace-nowrap"
-            style={{ left: tooltip.x, top: tooltip.y }}
+            className="mono fixed z-50 px-2 py-1 text-[10px] pointer-events-none whitespace-nowrap"
+            style={{ left: tooltip.x, top: tooltip.y, background: "var(--bg-elevated)", border: "1px solid var(--border-muted)", color: "var(--ink)" }}
           >
             {tooltip.text}
           </div>
@@ -80,12 +80,12 @@ export default function ContributionGraph({ weeks }: { weeks: Week[] }) {
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-1.5 mt-3 text-xs text-gray-500">
-        <span>Less</span>
+      <div className="mono flex items-center gap-1.5 mt-3 text-[9.5px]" style={{ color: "var(--ink-faint)" }}>
+        <span>LOW</span>
         {[0, 2, 5, 9, 12].map((n) => (
-          <div key={n} className="w-3 h-3 rounded-sm" style={{ backgroundColor: getColor(n) }} />
+          <div key={n} className="w-3 h-3" style={{ backgroundColor: getColor(n) }} />
         ))}
-        <span>More</span>
+        <span>HIGH</span>
       </div>
     </div>
   );

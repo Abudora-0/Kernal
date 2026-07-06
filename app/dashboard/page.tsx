@@ -4,10 +4,9 @@ import { useSession, signOut } from "next-auth/react";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Activity, Star, Code2, GitCommit, TrendingUp,
   BookOpen, LogOut, RefreshCw, ExternalLink,
-  GitFork, GitPullRequest, Flame, MapPin, Building2,
-  Users, Search, Share2, Check, Clock, Trophy,
+  GitFork, MapPin, Building2, Users, Search, Share2, Check,
+  Star, TrendingUp,
 } from "lucide-react";
 import ContributionGraph from "@/components/ContributionGraph";
 import LanguageChart from "@/components/LanguageChart";
@@ -21,18 +20,12 @@ import StatCard from "@/components/StatCard";
 
 type Tab = "overview" | "repos" | "activity";
 
-function Logo() {
+function Logo({ size = 24 }: { size?: number }) {
   return (
-    <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="hlg" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#fb923c"/>
-          <stop offset="100%" stopColor="#22d3ee"/>
-        </linearGradient>
-      </defs>
-      <rect x="6" y="6" width="88" height="88" rx="22" fill="url(#hlg)"/>
-      <polyline points="10,50 28,50 36,20 46,74 55,34 63,50 90,50"
-        stroke="white" strokeWidth="6.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1" y="1" width="30" height="30" fill="#0c1014" stroke="#2ee889" strokeWidth="1.5" />
+      <polyline points="5,20 11,20 14,8 18,25 21,14 24,20 28,20"
+        stroke="#2ee889" strokeWidth="2" fill="none" strokeLinecap="square" strokeLinejoin="miter" />
     </svg>
   );
 }
@@ -90,13 +83,13 @@ export default function DashboardPage() {
   if (status === "loading" || loading) {
     return (
       <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-        <div className="h-14" style={{ background: "var(--bg-surface)", borderBottom: "1px solid var(--border)" }} />
-        <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
-          <div className="skeleton h-36 rounded-2xl" />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[...Array(4)].map((_, i) => <div key={i} className="skeleton h-28 rounded-2xl" />)}
+        <div className="h-12" style={{ background: "var(--bg-surface)", borderBottom: "1px solid var(--border)" }} />
+        <div className="max-w-7xl mx-auto px-6 py-6 space-y-4">
+          <div className="skeleton h-28" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[...Array(4)].map((_, i) => <div key={i} className="skeleton h-24" />)}
           </div>
-          <div className="skeleton h-48 rounded-2xl" />
+          <div className="skeleton h-48" />
         </div>
       </div>
     );
@@ -105,16 +98,13 @@ export default function DashboardPage() {
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg-base)" }}>
-        <div className="glass rounded-2xl p-8 text-center space-y-4 max-w-sm mx-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto"
-            style={{ background: "rgba(251,146,60,0.1)", border: "1px solid rgba(251,146,60,0.2)" }}>
-            <Activity className="w-6 h-6" style={{ color: "#fb923c" }} />
-          </div>
-          <p className="font-medium" style={{ color: "#fb923c" }}>{error}</p>
-          <button onClick={fetchData}
-            className="w-full text-white py-2.5 px-4 rounded-xl transition-colors font-medium"
-            style={{ background: "linear-gradient(135deg, #fb923c, #22d3ee)" }}>
-            Try Again
+        <div className="panel p-8 text-center space-y-4 max-w-sm mx-4">
+          <p className="mono text-[10px] tracking-[0.25em] font-bold" style={{ color: "var(--down)" }}>
+            ▌ FEED ERROR
+          </p>
+          <p className="text-sm" style={{ color: "var(--ink-muted)" }}>{error}</p>
+          <button onClick={fetchData} className="tbtn tbtn-primary w-full justify-center py-2.5">
+            Reconnect feed
           </button>
         </div>
       </div>
@@ -122,130 +112,117 @@ export default function DashboardPage() {
   }
 
   const profile = data?.profile;
-  const tabs: { id: Tab; label: string }[] = [
-    { id: "overview", label: "Overview" },
-    { id: "repos", label: "Repositories" },
-    { id: "activity", label: "Activity" },
+  const tabs: { id: Tab; label: string; key: string }[] = [
+    { id: "overview", label: "Overview",     key: "F1" },
+    { id: "repos",    label: "Repositories", key: "F2" },
+    { id: "activity", label: "Activity",     key: "F3" },
   ];
 
   return (
-    <div className="min-h-screen text-white" style={{ background: "var(--bg-base)" }}>
+    <div className="min-h-screen" style={{ background: "var(--bg-base)", color: "var(--ink)" }}>
       {/* Header */}
-      <header className="sticky top-0 z-20 backdrop-blur-xl"
-        style={{ borderBottom: "1px solid var(--border)", background: "rgba(11,14,22,0.85)" }}>
-        <div className="max-w-7xl mx-auto px-6 h-14 flex items-center gap-4">
-          {/* Logo */}
+      <header className="sticky top-0 z-20"
+        style={{ borderBottom: "1px solid var(--border)", background: "rgba(6,8,9,0.92)", backdropFilter: "blur(10px)" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-12 flex items-center gap-4">
           <div className="flex items-center gap-2.5 flex-shrink-0">
             <Logo />
-            <span className="font-bold text-white hidden sm:block">DevPulse</span>
+            <span className="mono font-bold text-[13px] tracking-[0.06em] hidden sm:block" style={{ color: "var(--ink)" }}>
+              DEV<span style={{ color: "var(--up)" }}>PULSE</span>
+            </span>
           </div>
 
-          {/* Search */}
+          {/* ticker lookup */}
           <form onSubmit={handleSearch} className="flex-1 max-w-xs">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: "#3a5070" }} />
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: "var(--ink-faint)" }} />
               <input
                 ref={searchRef}
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                placeholder="Search any GitHub user..."
-                className="w-full rounded-lg pl-9 pr-3 py-1.5 text-sm text-white placeholder:text-[#3a5070] focus:outline-none transition-colors"
-                style={{ background: "rgba(255,255,255,0.05)", border: "1px solid var(--border-muted)" }}
-                onFocus={e => (e.currentTarget.style.borderColor = "rgba(251,146,60,0.5)")}
-                onBlur={e => (e.currentTarget.style.borderColor = "var(--border-muted)")}
+                placeholder="LOOKUP USER…"
+                className="tinput pl-8"
               />
             </div>
           </form>
 
           <div className="flex items-center gap-2 ml-auto">
-            {/* Share */}
-            <button onClick={copyShareLink}
-              className="hidden sm:flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg transition-all"
-              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid var(--border-muted)", color: "#7a8fa8" }}
-              title="Copy shareable link">
+            <button onClick={copyShareLink} className="tbtn hidden sm:inline-flex" title="Copy shareable link">
               {copied
-                ? <><Check className="w-3.5 h-3.5" style={{ color: "#a3e635" }} />Copied!</>
-                : <><Share2 className="w-3.5 h-3.5" />Share</>}
+                ? <><Check className="w-3 h-3" style={{ color: "var(--up)" }} />Copied</>
+                : <><Share2 className="w-3 h-3" />Share</>}
             </button>
 
-            <div className="w-px h-5" style={{ background: "var(--border-muted)" }} />
-
             <button onClick={fetchData} disabled={refreshing}
-              className="p-2 rounded-lg transition-colors disabled:opacity-40"
-              style={{ color: "#7a8fa8" }}
-              title="Refresh">
-              <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
+              className="tbtn px-2" title="Refresh">
+              <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} />
             </button>
 
             {session?.user?.image && (
               <img src={session.user.image} alt="avatar"
-                className="w-7 h-7 rounded-full"
-                style={{ boxShadow: "0 0 0 2px rgba(251,146,60,0.4)" }} />
+                className="w-6 h-6"
+                style={{ border: "1px solid var(--border-muted)" }} />
             )}
-            <span className="text-sm hidden md:block" style={{ color: "#8fa8c4" }}>{session?.user?.name}</span>
             <button onClick={() => signOut({ callbackUrl: "/login" })}
-              className="p-2 rounded-lg transition-colors"
-              style={{ color: "#7a8fa8" }}
-              title="Sign out">
-              <LogOut className="w-4 h-4 hover:text-red-400" />
+              className="tbtn px-2" title="Sign out">
+              <LogOut className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
-        {/* Profile Banner */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-4">
+        {/* Profile strip */}
         {profile && (
-          <div className="animate-fade-in-up glass rounded-2xl p-6"
-            style={{ borderTop: "2px solid transparent", backgroundImage: "linear-gradient(var(--bg-surface), var(--bg-surface)), linear-gradient(to right, #fb923c, #22d3ee)", backgroundOrigin: "border-box", backgroundClip: "padding-box, border-box" }}>
-            <div className="flex items-start gap-5">
-              <div className="relative flex-shrink-0">
-                <img src={profile.avatar_url} alt="avatar"
-                  className="w-20 h-20 rounded-2xl"
-                  style={{ boxShadow: "0 0 0 2px rgba(251,146,60,0.25)" }} />
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2"
-                  style={{ borderColor: "var(--bg-surface)" }} />
-              </div>
+          <div className="animate-fade-in-up panel">
+            <div className="panel-hd">
+              <span className="tick" />
+              <span className="panel-title">Trader Profile</span>
+              <span className="mono text-[10px] ml-auto flex items-center gap-2" style={{ color: "var(--up)" }}>
+                <span className="led led-up led-pulse" /> LIVE FEED
+              </span>
+            </div>
+            <div className="panel-bd flex items-start gap-4">
+              <img src={profile.avatar_url} alt="avatar"
+                className="w-16 h-16 flex-shrink-0"
+                style={{ border: "1px solid var(--border-muted)" }} />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 flex-wrap">
-                  <h1 className="text-xl font-bold text-white">{profile.name || profile.login}</h1>
-                  <span className="text-sm px-2 py-0.5 rounded-full" style={{ color: "#7a8fa8", background: "rgba(255,255,255,0.05)" }}>
-                    @{profile.login}
-                  </span>
+                  <h1 className="text-lg font-bold" style={{ color: "var(--ink)" }}>{profile.name || profile.login}</h1>
+                  <span className="mono text-[11px]" style={{ color: "var(--ink-muted)" }}>@{profile.login}</span>
                   <a href={profile.html_url} target="_blank" rel="noreferrer"
-                    className="transition-colors" style={{ color: "#3a5070" }}
-                    onMouseEnter={e => (e.currentTarget.style.color = "#fb923c")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#3a5070")}>
+                    style={{ color: "var(--ink-faint)" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "var(--up)")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "var(--ink-faint)")}>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                   {data?.grade && (
-                    <span className="text-xs font-bold px-2 py-0.5 rounded-full"
-                      style={{ background: "rgba(251,146,60,0.15)", border: "1px solid rgba(251,146,60,0.3)", color: "#fb923c" }}>
-                      Grade {data.grade}
+                    <span className="mono text-[10px] font-bold px-1.5 py-0.5"
+                      style={{ border: "1px solid var(--up)", color: "var(--up)" }}>
+                      GRADE {data.grade}
                     </span>
                   )}
                 </div>
-                {profile.bio && <p className="text-sm mt-1.5 leading-relaxed" style={{ color: "#7a8fa8" }}>{profile.bio}</p>}
-                <div className="flex flex-wrap items-center gap-4 mt-3 text-sm" style={{ color: "#4a6080" }}>
+                {profile.bio && <p className="text-sm mt-1.5 leading-relaxed" style={{ color: "var(--ink-muted)" }}>{profile.bio}</p>}
+                <div className="mono flex flex-wrap items-center gap-4 mt-2.5 text-[11px]" style={{ color: "var(--ink-faint)" }}>
                   <span className="flex items-center gap-1.5">
-                    <Users className="w-3.5 h-3.5" />
-                    {profile.followers} followers · {profile.following} following
+                    <Users className="w-3 h-3" />
+                    {profile.followers} FLW · {profile.following} FLWG
                   </span>
-                  {profile.location && <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" />{profile.location}</span>}
-                  {profile.company && <span className="flex items-center gap-1.5"><Building2 className="w-3.5 h-3.5" />{profile.company}</span>}
+                  {profile.location && <span className="flex items-center gap-1.5"><MapPin className="w-3 h-3" />{profile.location}</span>}
+                  {profile.company && <span className="flex items-center gap-1.5"><Building2 className="w-3 h-3" />{profile.company}</span>}
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* Stats */}
+        {/* Quote tiles */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
-            { icon: <BookOpen className="w-4 h-4 text-orange-400" />, label: "Public Repos",   value: data?.totalRepos ?? 0,                              color: "orange" as const, delay: 0 },
-            { icon: <Star      className="w-4 h-4 text-yellow-400" />, label: "Total Stars",    value: data?.totalStars ?? 0,                              color: "yellow" as const, delay: 80 },
-            { icon: <TrendingUp className="w-4 h-4 text-cyan-400"  />, label: "Contributions", value: data?.contributions?.totalContributions ?? 0,       color: "cyan"   as const, delay: 160 },
-            { icon: <GitFork   className="w-4 h-4 text-lime-400"   />, label: "Total Forks",   value: data?.totalForks ?? 0,                              color: "lime"   as const, delay: 240 },
+            { icon: <BookOpen className="w-4 h-4" />,   label: "Public Repos",  value: data?.totalRepos ?? 0,                        color: "cyan"   as const, delay: 0 },
+            { icon: <Star className="w-4 h-4" />,       label: "Total Stars",   value: data?.totalStars ?? 0,                        color: "yellow" as const, delay: 80 },
+            { icon: <TrendingUp className="w-4 h-4" />, label: "Contributions", value: data?.contributions?.totalContributions ?? 0, color: "lime"   as const, delay: 160 },
+            { icon: <GitFork className="w-4 h-4" />,    label: "Total Forks",   value: data?.totalForks ?? 0,                        color: "cyan"   as const, delay: 240 },
           ].map((s, i) => (
             <div key={s.label} className={`animate-fade-in-up stagger-${i + 1}`}>
               <StatCard {...s} />
@@ -253,90 +230,81 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-1 rounded-xl p-1 w-fit"
-          style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)" }}>
+        {/* Function-key tabs */}
+        <div className="flex gap-1 w-fit p-1" style={{ border: "1px solid var(--border)", background: "var(--bg-surface)" }}>
           {tabs.map((t) => (
-            <button key={t.id} onClick={() => setTab(t.id)}
-              className="px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
-              style={tab === t.id
-                ? { background: "linear-gradient(135deg, #fb923c, #22d3ee)", color: "white", boxShadow: "0 4px 12px rgba(251,146,60,0.3)" }
-                : { color: "#4a6080" }}>
-              {t.label}
+            <button key={t.id} onClick={() => setTab(t.id)} className={`fkey ${tab === t.id ? "active" : ""}`}>
+              <span className="fnum">{t.key}</span>{t.label}
             </button>
           ))}
         </div>
 
         {/* Tab: Overview */}
         {tab === "overview" && (
-          <div className="space-y-6 animate-fade-in">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <div className="space-y-4 animate-fade-in">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               {data?.score !== undefined && (
-                <div className="glass rounded-2xl p-6">
-                  <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm text-white">
-                    <Trophy className="w-4 h-4 text-yellow-400" />Developer Score
-                  </h2>
-                  <ScoreCard score={data.score} grade={data.grade} breakdown={data.breakdown} />
+                <div className="panel">
+                  <div className="panel-hd"><span className="tick" /><span className="panel-title">Developer Index</span></div>
+                  <div className="panel-bd">
+                    <ScoreCard score={data.score} grade={data.grade} breakdown={data.breakdown} />
+                  </div>
                 </div>
               )}
               {data?.contributions && (
-                <div className="glass rounded-2xl p-6 lg:col-span-2">
-                  <div className="flex items-center justify-between mb-5">
-                    <h2 className="font-semibold flex items-center gap-2 text-sm text-white">
-                      <TrendingUp className="w-4 h-4 text-cyan-400" />Contribution Activity
-                    </h2>
-                    <span className="text-xs px-2.5 py-1 rounded-full"
-                      style={{ color: "#22d3ee", background: "rgba(34,211,238,0.08)", border: "1px solid rgba(34,211,238,0.2)" }}>
-                      {data.contributions.totalContributions.toLocaleString()} this year
+                <div className="panel lg:col-span-2">
+                  <div className="panel-hd">
+                    <span className="tick" />
+                    <span className="panel-title">Contribution Volume · 52W</span>
+                    <span className="mono text-[10px] ml-auto" style={{ color: "var(--up)" }}>
+                      {data.contributions.totalContributions.toLocaleString()} YTD
                     </span>
                   </div>
-                  <ContributionGraph weeks={data.contributions.weeks} />
+                  <div className="panel-bd">
+                    <ContributionGraph weeks={data.contributions.weeks} />
+                  </div>
                 </div>
               )}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               {data?.languages?.length > 0 && (
-                <div className="glass rounded-2xl p-6">
-                  <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm text-white">
-                    <Code2 className="w-4 h-4 text-cyan-400" />Languages
-                  </h2>
-                  <LanguageChart languages={data.languages} />
+                <div className="panel">
+                  <div className="panel-hd"><span className="tick" /><span className="panel-title">Language Allocation</span></div>
+                  <div className="panel-bd">
+                    <LanguageChart languages={data.languages} />
+                  </div>
                 </div>
               )}
               {data?.streak && (
-                <div className="glass rounded-2xl p-6">
-                  <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm text-white">
-                    <Flame className="w-4 h-4 text-orange-400" />Coding Streak
-                  </h2>
-                  <StreakCard current={data.streak.current} longest={data.streak.longest} activityByDay={data.activityByDay || []} />
+                <div className="panel">
+                  <div className="panel-hd"><span className="tick" /><span className="panel-title">Streak Position</span></div>
+                  <div className="panel-bd">
+                    <StreakCard current={data.streak.current} longest={data.streak.longest} activityByDay={data.activityByDay || []} />
+                  </div>
                 </div>
               )}
               {data?.activityByHour && (
-                <div className="glass rounded-2xl p-6">
-                  <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm text-white">
-                    <Clock className="w-4 h-4 text-orange-400" />Coding Hours
-                  </h2>
-                  <HourlyHeatmap activityByHour={data.activityByHour} />
+                <div className="panel">
+                  <div className="panel-hd"><span className="tick" /><span className="panel-title">Intraday Activity</span></div>
+                  <div className="panel-bd">
+                    <HourlyHeatmap activityByHour={data.activityByHour} />
+                  </div>
                 </div>
               )}
             </div>
 
             {data?.topRepos?.length > 0 && (
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="font-semibold flex items-center gap-2 text-sm text-white">
-                    <Star className="w-4 h-4 text-yellow-400" />Top Repositories
-                  </h2>
+                <div className="flex items-baseline justify-between mb-3">
+                  <h2 className="panel-title">▌ Top Holdings · Repositories</h2>
                   <button onClick={() => setTab("repos")}
-                    className="text-sm transition-colors"
-                    style={{ color: "#fb923c" }}
-                    onMouseEnter={e => (e.currentTarget.style.color = "#22d3ee")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#fb923c")}>
-                    View all →
+                    className="mono text-[11px] transition-colors"
+                    style={{ color: "var(--up)" }}>
+                    VIEW ALL ▸
                   </button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {data.topRepos.slice(0, 3).map((repo: any) => <RepoCard key={repo.name} repo={repo} />)}
                 </div>
               </div>
@@ -346,7 +314,7 @@ export default function DashboardPage() {
 
         {/* Tab: Repos */}
         {tab === "repos" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 animate-fade-in">
             {data?.topRepos?.map((repo: any, i: number) => (
               <div key={repo.name} className="animate-fade-in-up" style={{ animationDelay: `${i * 60}ms` }}>
                 <RepoCard repo={repo} />
@@ -357,27 +325,27 @@ export default function DashboardPage() {
 
         {/* Tab: Activity */}
         {tab === "activity" && (
-          <div className="space-y-5 animate-fade-in">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-              <div className="glass rounded-2xl p-6">
-                <h2 className="font-semibold flex items-center gap-2 mb-4 text-sm text-white">
-                  <GitCommit className="w-4 h-4 text-orange-400" />Recent Commits
-                </h2>
-                <CommitFeed commits={data?.commits || []} />
+          <div className="space-y-4 animate-fade-in">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="panel">
+                <div className="panel-hd"><span className="tick" /><span className="panel-title">Commit Tape</span></div>
+                <div className="panel-bd pt-1">
+                  <CommitFeed commits={data?.commits || []} />
+                </div>
               </div>
-              <div className="glass rounded-2xl p-6">
-                <h2 className="font-semibold flex items-center gap-2 mb-4 text-sm text-white">
-                  <GitPullRequest className="w-4 h-4 text-cyan-400" />Pull Requests
-                </h2>
-                <PRFeed prs={data?.prs || []} />
+              <div className="panel">
+                <div className="panel-hd"><span className="tick" /><span className="panel-title">Pull Request Orders</span></div>
+                <div className="panel-bd pt-1">
+                  <PRFeed prs={data?.prs || []} />
+                </div>
               </div>
             </div>
             {data?.activityByHour && (
-              <div className="glass rounded-2xl p-6">
-                <h2 className="font-semibold flex items-center gap-2 mb-5 text-sm text-white">
-                  <Clock className="w-4 h-4 text-orange-400" />Activity by Hour of Day
-                </h2>
-                <HourlyHeatmap activityByHour={data.activityByHour} />
+              <div className="panel">
+                <div className="panel-hd"><span className="tick" /><span className="panel-title">Intraday Activity · 24H</span></div>
+                <div className="panel-bd">
+                  <HourlyHeatmap activityByHour={data.activityByHour} />
+                </div>
               </div>
             )}
           </div>

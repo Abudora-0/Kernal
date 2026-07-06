@@ -11,16 +11,17 @@ interface StatCardProps {
   delay?: number;
 }
 
+/* signal color per metric — terminal quote-tile style */
 const colorMap = {
-  orange: { bg: "rgba(251,146,60,0.08)",  border: "rgba(251,146,60,0.2)",  icon: "rgba(251,146,60,0.15)",  glow: "rgba(251,146,60,0.15)" },
-  yellow: { bg: "rgba(251,191,36,0.08)",  border: "rgba(251,191,36,0.2)",  icon: "rgba(251,191,36,0.15)",  glow: "rgba(251,191,36,0.15)" },
-  cyan:   { bg: "rgba(34,211,238,0.08)",  border: "rgba(34,211,238,0.2)",  icon: "rgba(34,211,238,0.15)",  glow: "rgba(34,211,238,0.15)" },
-  lime:   { bg: "rgba(163,230,53,0.08)",  border: "rgba(163,230,53,0.2)",  icon: "rgba(163,230,53,0.15)",  glow: "rgba(163,230,53,0.15)" },
+  orange: "var(--warn)",
+  yellow: "var(--warn)",
+  cyan:   "var(--info)",
+  lime:   "var(--up)",
 };
 
-export default function StatCard({ icon, label, value, color, suffix = "", delay = 0 }: StatCardProps) {
+export default function StatCard({ label, value, color, suffix = "", delay = 0 }: StatCardProps) {
   const [display, setDisplay] = useState(0);
-  const c = colorMap[color];
+  const accent = colorMap[color];
 
   useEffect(() => {
     const duration = 800;
@@ -40,19 +41,20 @@ export default function StatCard({ icon, label, value, color, suffix = "", delay
 
   return (
     <div
-      className="rounded-2xl p-5 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-default"
-      style={{ background: c.bg, border: `1px solid ${c.border}` }}
-      onMouseEnter={e => (e.currentTarget.style.boxShadow = `0 8px 24px ${c.glow}`)}
-      onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}
+      className="panel p-4 transition-colors duration-200 cursor-default group"
+      onMouseEnter={e => (e.currentTarget.style.borderColor = "var(--border-muted)")}
+      onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--border)")}
     >
-      <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3"
-        style={{ background: c.icon }}>
-        {icon}
+      <div className="flex items-center gap-2 mb-2.5">
+        <span style={{ width: 3, height: 10, background: accent, display: "inline-block" }} />
+        <span className="dlabel">{label}</span>
       </div>
-      <p className="text-2xl font-bold text-white tabular-nums">
-        {display.toLocaleString()}{suffix}
-      </p>
-      <p className="text-sm mt-1" style={{ color: "#4a6080" }}>{label}</p>
+      <div className="flex items-baseline gap-1.5">
+        <p className="mono text-[26px] font-semibold leading-none" style={{ color: "var(--ink)" }}>
+          {display.toLocaleString()}{suffix}
+        </p>
+        <span className="mono text-[11px]" style={{ color: accent }}>▲</span>
+      </div>
     </div>
   );
 }

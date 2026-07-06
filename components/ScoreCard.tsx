@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trophy } from "lucide-react";
 
 interface ScoreCardProps {
   score: number;
@@ -9,22 +8,24 @@ interface ScoreCardProps {
   breakdown: Record<string, number>;
 }
 
-const gradeConfig: Record<string, { color: string; bg: string; border: string; label: string }> = {
-  S: { color: "#fbbf24", bg: "rgba(251,191,36,0.1)",  border: "rgba(251,191,36,0.3)",  label: "Legendary" },
-  A: { color: "#fb923c", bg: "rgba(251,146,60,0.1)",  border: "rgba(251,146,60,0.3)",  label: "Expert"    },
-  B: { color: "#22d3ee", bg: "rgba(34,211,238,0.1)",  border: "rgba(34,211,238,0.3)",  label: "Skilled"   },
-  C: { color: "#a3e635", bg: "rgba(163,230,53,0.1)",  border: "rgba(163,230,53,0.3)",  label: "Growing"   },
-  D: { color: "#7a8fa8", bg: "rgba(122,143,168,0.1)", border: "rgba(122,143,168,0.3)", label: "Beginner"  },
+const gradeConfig: Record<string, { color: string; label: string }> = {
+  S: { color: "var(--warn)", label: "LEGENDARY" },
+  A: { color: "var(--up)",   label: "EXPERT"    },
+  B: { color: "var(--info)", label: "SKILLED"   },
+  C: { color: "var(--info)", label: "GROWING"   },
+  D: { color: "var(--ink-muted)", label: "BEGINNER" },
 };
 
 const breakdownLabels: Record<string, string> = {
-  repos: "Repositories", stars: "Stars earned", contributions: "Contributions",
-  streak: "Current streak", longestStreak: "Longest streak", followers: "Followers",
+  repos: "REPOS", stars: "STARS", contributions: "CONTRIB",
+  streak: "STREAK", longestStreak: "MAX STRK", followers: "FOLLOWERS",
 };
 
 const maxValues: Record<string, number> = {
   repos: 20, stars: 25, contributions: 25, streak: 15, longestStreak: 10, followers: 5,
 };
+
+const SEGMENTS = 16;
 
 export default function ScoreCard({ score, grade, breakdown }: ScoreCardProps) {
   const [animScore, setAnimScore] = useState(0);
@@ -40,61 +41,57 @@ export default function ScoreCard({ score, grade, breakdown }: ScoreCardProps) {
     return () => clearInterval(interval);
   }, [score]);
 
-  const circumference = 2 * Math.PI * 36;
-  const progress = (animScore / 100) * circumference;
+  const lit = Math.round((animScore / 100) * SEGMENTS);
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-5">
-        <div className="relative w-24 h-24 flex-shrink-0">
-          <svg className="w-24 h-24 -rotate-90" viewBox="0 0 80 80">
-            <circle cx="40" cy="40" r="36" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="6" />
-            <circle
-              cx="40" cy="40" r="36" fill="none"
-              stroke="url(#scoreGrad)" strokeWidth="6"
-              strokeLinecap="round"
-              strokeDasharray={circumference}
-              strokeDashoffset={circumference - progress}
-              style={{ transition: "stroke-dashoffset 0.05s linear", filter: "drop-shadow(0 0 6px rgba(251,146,60,0.5))" }}
-            />
-            <defs>
-              <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#fb923c" />
-                <stop offset="100%" stopColor="#22d3ee" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-xl font-bold text-white">{animScore}</span>
-            <span className="text-[10px]" style={{ color: "#4a6080" }}>/ 100</span>
+    <div className="space-y-5">
+      {/* index readout */}
+      <div className="flex items-end justify-between">
+        <div>
+          <p className="dlabel mb-1">DEV INDEX</p>
+          <div className="flex items-baseline gap-2">
+            <span className="mono font-bold leading-none" style={{ fontSize: 42, color: cfg.color }}>
+              {animScore}
+            </span>
+            <span className="mono text-[11px]" style={{ color: "var(--ink-faint)" }}>/100</span>
           </div>
         </div>
-
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border mb-2"
-            style={{ background: cfg.bg, borderColor: cfg.border }}>
-            <Trophy className="w-4 h-4" style={{ color: cfg.color }} />
-            <span className="text-lg font-bold" style={{ color: cfg.color }}>Grade {grade}</span>
-          </div>
-          <p className="text-sm font-medium" style={{ color: cfg.color }}>{cfg.label} Developer</p>
-          <p className="text-xs mt-0.5" style={{ color: "#3a5070" }}>Based on your GitHub activity</p>
+        <div className="text-right">
+          <span
+            className="mono inline-block px-2.5 py-1 text-[16px] font-bold leading-none"
+            style={{ border: `1px solid ${cfg.color}`, color: cfg.color }}
+          >
+            {grade}
+          </span>
+          <p className="dlabel mt-1.5" style={{ color: cfg.color }}>{cfg.label}</p>
         </div>
       </div>
 
-      <div className="space-y-2">
+      {/* segmented gauge */}
+      <div className="flex gap-[3px]">
+        {Array.from({ length: SEGMENTS }).map((_, i) => (
+          <div
+            key={i}
+            className="h-2 flex-1 transition-colors duration-75"
+            style={
+              i < lit
+                ? { background: cfg.color }
+                : { background: "var(--bg-elevated)", border: "1px solid var(--border)" }
+            }
+          />
+        ))}
+      </div>
+
+      {/* breakdown table */}
+      <div className="space-y-1.5 pt-1">
         {Object.entries(breakdown).map(([key, val]) => (
-          <div key={key} className="flex items-center gap-3">
-            <span className="text-xs w-28 flex-shrink-0" style={{ color: "#4a6080" }}>{breakdownLabels[key]}</span>
-            <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "var(--border)" }}>
-              <div
-                className="h-full rounded-full transition-all duration-700"
-                style={{
-                  width: `${(val / maxValues[key]) * 100}%`,
-                  background: "linear-gradient(to right, #fb923c, #22d3ee)",
-                }}
-              />
-            </div>
-            <span className="text-xs w-8 text-right tabular-nums" style={{ color: "#3a5070" }}>{val}/{maxValues[key]}</span>
+          <div key={key} className="flex items-baseline text-[11px]">
+            <span className="dlabel w-20 flex-shrink-0">{breakdownLabels[key] ?? key.toUpperCase()}</span>
+            <span className="leader" />
+            <span className="mono" style={{ color: "var(--ink)" }}>
+              {val}
+              <span style={{ color: "var(--ink-faint)" }}>/{maxValues[key]}</span>
+            </span>
           </div>
         ))}
       </div>

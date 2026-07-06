@@ -1,14 +1,12 @@
 "use client";
 
-import { Flame, Zap } from "lucide-react";
-
 interface StreakCardProps {
   current: number;
   longest: number;
   activityByDay: number[];
 }
 
-const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const DAYS = ["S", "M", "T", "W", "T", "F", "S"];
 
 export default function StreakCard({ current, longest, activityByDay }: StreakCardProps) {
   const max = Math.max(...activityByDay, 1);
@@ -16,41 +14,36 @@ export default function StreakCard({ current, longest, activityByDay }: StreakCa
   return (
     <div className="space-y-5">
       <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-xl p-4 text-center"
-          style={{ background: "rgba(251,146,60,0.08)", border: "1px solid rgba(251,146,60,0.2)" }}>
-          <div className="flex items-center justify-center gap-1.5 mb-1">
-            <Flame className="w-4 h-4 text-orange-400" />
-            <span className="text-xs" style={{ color: "#4a6080" }}>Current Streak</span>
-          </div>
-          <p className="text-3xl font-bold text-orange-400">{current}</p>
-          <p className="text-xs mt-0.5" style={{ color: "#3a5070" }}>days</p>
+        <div className="p-3" style={{ border: "1px solid var(--border)" }}>
+          <p className="dlabel mb-1.5">CURRENT</p>
+          <p className="mono text-[28px] font-semibold leading-none" style={{ color: "var(--up)" }}>
+            {current}
+            <span className="text-[11px] ml-1" style={{ color: "var(--ink-faint)" }}>D</span>
+          </p>
         </div>
-        <div className="rounded-xl p-4 text-center"
-          style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.2)" }}>
-          <div className="flex items-center justify-center gap-1.5 mb-1">
-            <Zap className="w-4 h-4 text-yellow-400" />
-            <span className="text-xs" style={{ color: "#4a6080" }}>Longest Streak</span>
-          </div>
-          <p className="text-3xl font-bold text-yellow-400">{longest}</p>
-          <p className="text-xs mt-0.5" style={{ color: "#3a5070" }}>days</p>
+        <div className="p-3" style={{ border: "1px solid var(--border)" }}>
+          <p className="dlabel mb-1.5">RECORD</p>
+          <p className="mono text-[28px] font-semibold leading-none" style={{ color: "var(--warn)" }}>
+            {longest}
+            <span className="text-[11px] ml-1" style={{ color: "var(--ink-faint)" }}>D</span>
+          </p>
         </div>
       </div>
 
       <div>
-        <p className="text-xs mb-2" style={{ color: "#3a5070" }}>Activity by day of week</p>
-        <div className="flex items-end gap-1.5 h-16">
+        <p className="dlabel mb-2">VOLUME BY WEEKDAY</p>
+        <div className="flex items-end gap-1 h-14">
           {DAYS.map((day, i) => (
-            <div key={day} className="flex-1 flex flex-col items-center gap-1">
+            <div key={i} className="flex-1 flex flex-col items-center gap-1">
               <div
-                className="w-full rounded-t-sm transition-all duration-500"
+                className="w-full transition-all duration-500"
                 style={{
-                  height: `${(activityByDay[i] / max) * 48}px`,
+                  height: `${(activityByDay[i] / max) * 44}px`,
                   minHeight: "2px",
-                  background: "linear-gradient(to top, #fb923c, #22d3ee)",
-                  opacity: 0.7,
+                  background: (activityByDay[i] === Math.max(...activityByDay)) ? "var(--up)" : "rgba(46,232,137,0.35)",
                 }}
               />
-              <span className="text-[10px]" style={{ color: "#3a5070" }}>{day.slice(0, 1)}</span>
+              <span className="mono text-[9px]" style={{ color: "var(--ink-faint)" }}>{day}</span>
             </div>
           ))}
         </div>

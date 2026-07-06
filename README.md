@@ -9,6 +9,10 @@ A GitHub-integrated developer dashboard that turns your public GitHub activity i
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-3ECF8E?logo=supabase&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-5-2D3748?logo=prisma&logoColor=white)
 
+## Design
+
+A financial market terminal for developer data: deep navy-black panels with signal-green ticks, IBM Plex Mono readouts with tabular numerals, dotted leader lines, function-key tabs (F1/F2/F3) and a segmented DEV INDEX gauge — your GitHub as a Bloomberg screen.
+
 ## Features
 
 - **Developer Score** — letter grade (S / A / B / C / D) derived from real GitHub metrics
