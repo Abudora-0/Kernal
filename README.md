@@ -8,7 +8,7 @@ A GitHub-integrated developer dashboard that turns your public GitHub activity i
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-3ECF8E?logo=supabase&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-5-2D3748?logo=prisma&logoColor=white)
-[![Version](https://img.shields.io/github/v/tag/Abudora-0/Dev-Dashboard?label=version&color=2ee889)](https://github.com/Abudora-0/Dev-Dashboard/tags)
+[![Version](https://img.shields.io/github/v/tag/Abudora-0/Kernal?label=version&color=2ee889)](https://github.com/Abudora-0/Kernal/tags)
 [![License: MIT](https://img.shields.io/badge/License-MIT-2ee889.svg)](LICENSE)
 
 ## Design
@@ -53,8 +53,8 @@ A financial market terminal for developer data: deep navy-black panels with sign
 ### Installation
 
 ```bash
-git clone https://github.com/Abudora-0/Dev-Dashboard.git
-cd Dev-Dashboard
+git clone https://github.com/Abudora-0/Kernal.git
+cd Kernal
 npm install
 ```
 
