@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import {
   Star, GitFork, TrendingUp, BookOpen,
-  ExternalLink, MapPin, Building2, Users, Share2, Check,
+  ExternalLink, MapPin, Building2, Users, Share2, Check, ArrowLeft,
 } from "lucide-react";
 import ContributionGraph from "@/components/ContributionGraph";
 import LanguageChart from "@/components/LanguageChart";
@@ -106,9 +106,17 @@ export default function PublicProfilePage() {
             <Logo />
             <Wordmark />
           </a>
-          <button onClick={copyLink} className="tbtn">
-            {copied ? <><Check className="w-3 h-3" style={{ color: "var(--up)" }} />Copied</> : <><Share2 className="w-3 h-3" />Share profile</>}
-          </button>
+          <div className="flex items-center gap-2">
+            <a href="/dashboard" className="tbtn" title="Back to dashboard">
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Dashboard</span>
+            </a>
+            <button onClick={copyLink} className="tbtn">
+              {copied
+                ? <><Check className="w-3 h-3" style={{ color: "var(--up)" }} /><span className="hidden sm:inline">Copied</span></>
+                : <><Share2 className="w-3 h-3" /><span className="hidden sm:inline">Share profile</span></>}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -163,10 +171,10 @@ export default function PublicProfilePage() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 w-fit p-1" style={{ border: "1px solid var(--border)", background: "var(--bg-surface)" }}>
+        <div className="flex gap-1 w-full sm:w-fit p-1 overflow-x-auto" style={{ border: "1px solid var(--border)", background: "var(--bg-surface)" }}>
           {tabs.map((t) => (
-            <button key={t.id} onClick={() => setTab(t.id as any)} className={`fkey ${tab === t.id ? "active" : ""}`}>
-              <span className="fnum">{t.key}</span>{t.label}
+            <button key={t.id} onClick={() => setTab(t.id as any)} className={`fkey flex-1 sm:flex-none justify-center ${tab === t.id ? "active" : ""}`}>
+              <span className="fnum hidden sm:inline">{t.key}</span>{t.label}
             </button>
           ))}
         </div>
