@@ -10,7 +10,7 @@
 ## 1. Install Dependencies
 
 ```powershell
-cd D:\Projects\dev-dashboard
+cd "D:\Code\Resume Projects\dev-dashboard"
 npm install
 ```
 
@@ -18,7 +18,7 @@ npm install
 
 ## 2. Set Up Environment Variables
 
-The `.env` file is already configured. Make sure it exists at `D:\Projects\dev-dashboard\.env` with the following:
+The `.env` file is already configured. Make sure it exists at `D:\Code\Resume Projects\dev-dashboard\.env` with the following:
 
 ```env
 DATABASE_URL="your-supabase-connection-string"
@@ -110,7 +110,7 @@ http://localhost:3000
 ## Folder Structure
 
 ```
-dev-dashboard/
+Kernal/
 ├── app/
 │   ├── api/
 │   │   ├── auth/[...nextauth]/   # NextAuth handler
