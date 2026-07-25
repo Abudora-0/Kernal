@@ -11,7 +11,7 @@ interface StatCardProps {
   delay?: number;
 }
 
-/* signal color per metric — terminal quote-tile style */
+/* signal color per metric, terminal quote-tile style */
 const colorMap = {
   orange: "var(--warn)",
   yellow: "var(--warn)",

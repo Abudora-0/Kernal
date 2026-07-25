@@ -16,13 +16,26 @@ import ScoreCard from "@/components/ScoreCard";
 import HourlyHeatmap from "@/components/HourlyHeatmap";
 import StatCard from "@/components/StatCard";
 
-function Logo({ size = 24 }: { size?: number }) {
+function Logo({ size = 30 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="1" y="1" width="30" height="30" fill="#0c1014" stroke="#2ee889" strokeWidth="1.5" />
-      <polyline points="5,20 11,20 14,8 18,25 21,14 24,20 28,20"
-        stroke="#2ee889" strokeWidth="2" fill="none" strokeLinecap="square" strokeLinejoin="miter" />
+      <rect x="1" y="1" width="30" height="30" rx="7" fill="#0c1014" stroke="#2ee889" strokeWidth="1.5" />
+      <circle cx="6.5" cy="6.5" r="1.4" fill="#2ee889" />
+      <rect x="6" y="19" width="4" height="7" rx="0.6" fill="#1b8a58" />
+      <rect x="13" y="13" width="4" height="13" rx="0.6" fill="#2ee889" />
+      <rect x="20" y="6" width="4" height="20" rx="0.6" fill="#5eead4" />
     </svg>
+  );
+}
+
+function Wordmark({ className = "" }: { className?: string }) {
+  return (
+    <span className={`mono font-bold text-[16px] tracking-[0.06em] ${className}`} style={{ color: "var(--ink)" }}>
+      {"KERNAL".split("").map((ch, i) => (
+        <span key={i} className="wordmark-letter" style={{ animationDelay: `${i * 0.18}s` }}>{ch}</span>
+      ))}
+      <span className="wordmark-cursor" style={{ color: "var(--up)" }}>_</span>
+    </span>
   );
 }
 
@@ -88,12 +101,10 @@ export default function PublicProfilePage() {
       {/* Header */}
       <header className="sticky top-0 z-20"
         style={{ borderBottom: "1px solid var(--border)", background: "rgba(6,8,9,0.92)", backdropFilter: "blur(10px)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-12 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <a href="/dashboard" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
             <Logo />
-            <span className="mono font-bold text-[13px] tracking-[0.06em]" style={{ color: "var(--ink)" }}>
-              DEV<span style={{ color: "var(--up)" }}>PULSE</span>
-            </span>
+            <Wordmark />
           </a>
           <button onClick={copyLink} className="tbtn">
             {copied ? <><Check className="w-3 h-3" style={{ color: "var(--up)" }} />Copied</> : <><Share2 className="w-3 h-3" />Share profile</>}

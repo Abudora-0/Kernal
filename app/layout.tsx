@@ -11,7 +11,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DevPulse — Developer Data Terminal",
+  title: "Kernal: Developer Data Terminal",
   description: "Your GitHub activity as a live market terminal: contributions, streaks, languages, and a developer score.",
   icons: { icon: "/favicon.svg" },
 };

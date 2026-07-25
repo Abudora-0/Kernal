@@ -20,13 +20,26 @@ import StatCard from "@/components/StatCard";
 
 type Tab = "overview" | "repos" | "activity";
 
-function Logo({ size = 24 }: { size?: number }) {
+function Logo({ size = 30 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="1" y="1" width="30" height="30" fill="#0c1014" stroke="#2ee889" strokeWidth="1.5" />
-      <polyline points="5,20 11,20 14,8 18,25 21,14 24,20 28,20"
-        stroke="#2ee889" strokeWidth="2" fill="none" strokeLinecap="square" strokeLinejoin="miter" />
+      <rect x="1" y="1" width="30" height="30" rx="7" fill="#0c1014" stroke="#2ee889" strokeWidth="1.5" />
+      <circle cx="6.5" cy="6.5" r="1.4" fill="#2ee889" />
+      <rect x="6" y="19" width="4" height="7" rx="0.6" fill="#1b8a58" />
+      <rect x="13" y="13" width="4" height="13" rx="0.6" fill="#2ee889" />
+      <rect x="20" y="6" width="4" height="20" rx="0.6" fill="#5eead4" />
     </svg>
+  );
+}
+
+function Wordmark({ className = "" }: { className?: string }) {
+  return (
+    <span className={`mono font-bold text-[16px] tracking-[0.06em] ${className}`} style={{ color: "var(--ink)" }}>
+      {"KERNAL".split("").map((ch, i) => (
+        <span key={i} className="wordmark-letter" style={{ animationDelay: `${i * 0.18}s` }}>{ch}</span>
+      ))}
+      <span className="wordmark-cursor" style={{ color: "var(--up)" }}>_</span>
+    </span>
   );
 }
 
@@ -123,24 +136,23 @@ export default function DashboardPage() {
       {/* Header */}
       <header className="sticky top-0 z-20"
         style={{ borderBottom: "1px solid var(--border)", background: "rgba(6,8,9,0.92)", backdropFilter: "blur(10px)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-12 flex items-center gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-4">
           <div className="flex items-center gap-2.5 flex-shrink-0">
             <Logo />
-            <span className="mono font-bold text-[13px] tracking-[0.06em] hidden sm:block" style={{ color: "var(--ink)" }}>
-              DEV<span style={{ color: "var(--up)" }}>PULSE</span>
-            </span>
+            <Wordmark className="hidden sm:block" />
           </div>
 
           {/* ticker lookup */}
           <form onSubmit={handleSearch} className="flex-1 max-w-xs">
             <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: "var(--ink-faint)" }} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: "var(--ink-faint)" }} />
               <input
                 ref={searchRef}
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="LOOKUP USER…"
-                className="tinput pl-8"
+                className="tinput"
+                style={{ paddingLeft: "30px" }}
               />
             </div>
           </form>

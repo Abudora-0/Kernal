@@ -1,8 +1,8 @@
-# DevPulse
+# Kernal
 
 **Live Demo:** [dev-pulse-one-xi.vercel.app](https://dev-pulse-one-xi.vercel.app)
 
-A GitHub-integrated developer dashboard that turns your public GitHub activity into a beautiful, data-rich profile — contribution graphs, coding streaks, language breakdowns, and a developer score, all in one place.
+A GitHub-integrated developer dashboard that turns your public GitHub activity into a beautiful, data-rich profile: contribution graphs, coding streaks, language breakdowns, and a developer score, all in one place.
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
@@ -11,20 +11,20 @@ A GitHub-integrated developer dashboard that turns your public GitHub activity i
 
 ## Design
 
-A financial market terminal for developer data: deep navy-black panels with signal-green ticks, IBM Plex Mono readouts with tabular numerals, dotted leader lines, function-key tabs (F1/F2/F3) and a segmented DEV INDEX gauge — your GitHub as a Bloomberg screen.
+A financial market terminal for developer data: deep navy-black panels with signal-green ticks, IBM Plex Mono readouts with tabular numerals, dotted leader lines, function-key tabs (F1/F2/F3) and a segmented DEV INDEX gauge. Your GitHub as a Bloomberg screen.
 
 ## Features
 
-- **Developer Score** — letter grade (S / A / B / C / D) derived from real GitHub metrics
-- **Contribution Graph** — GitHub-style heatmap of your yearly activity
-- **Coding Streak** — current and longest streak tracking
-- **Language Breakdown** — pie / bar chart of languages used across all repositories
-- **Top Repositories** — sorted by stars with description and language tags
-- **Activity Feed** — recent commits and pull requests
-- **Hourly Heatmap** — activity distribution across hours of the day
-- **Public Profile URLs** — shareable pages at `/u/[username]`
-- **Search Any Profile** — look up any public GitHub user
-- **OAuth Login** — sign in with GitHub to unlock your personalized dashboard
+- **Developer Score**: letter grade (S / A / B / C / D) derived from real GitHub metrics
+- **Contribution Graph**: GitHub-style heatmap of your yearly activity
+- **Coding Streak**: current and longest streak tracking
+- **Language Breakdown**: pie / bar chart of languages used across all repositories
+- **Top Repositories**: sorted by stars with description and language tags
+- **Activity Feed**: recent commits and pull requests
+- **Hourly Heatmap**: activity distribution across hours of the day
+- **Public Profile URLs**: shareable pages at `/u/[username]`
+- **Search Any Profile**: look up any public GitHub user
+- **OAuth Login**: sign in with GitHub to unlock your personalized dashboard
 
 ## Tech Stack
 
@@ -66,7 +66,7 @@ NEXTAUTH_SECRET=your_random_secret
 NEXTAUTH_URL=http://localhost:3000
 GITHUB_CLIENT_ID=your_github_client_id
 GITHUB_CLIENT_SECRET=your_github_client_secret
-GITHUB_TOKEN=your_github_pat          # optional — increases API rate limits
+GITHUB_TOKEN=your_github_pat          # optional, increases API rate limits
 ```
 
 ### Database Setup

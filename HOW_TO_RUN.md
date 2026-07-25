@@ -1,4 +1,4 @@
-# DevPulse — How to Run
+# Kernal: How to Run
 
 ## Prerequisites
 - Node.js v18+ installed
@@ -36,7 +36,7 @@ GITHUB_SECRET="your-github-oauth-app-client-secret"
 1. Go to https://github.com/settings/developers
 2. Click **"New OAuth App"**
 3. Fill in:
-   - **Application name:** `Dev Dashboard`
+   - **Application name:** `Kernal`
    - **Homepage URL:** `http://localhost:3000`
    - **Authorization callback URL:** `http://localhost:3000/api/auth/callback/github`
 4. Copy the **Client ID** and **Client Secret** into `.env`
