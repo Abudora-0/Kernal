@@ -1,6 +1,6 @@
 # Kernal
 
-**Live Demo:** [dev-pulse-one-xi.vercel.app](https://dev-pulse-one-xi.vercel.app)
+**Live Demo:** [https://kernall.vercel.app/](https://kernall.vercel.app/)
 
 A GitHub-integrated developer dashboard that turns your public GitHub activity into a beautiful, data-rich profile: contribution graphs, coding streaks, language breakdowns, and a developer score, all in one place.
 
